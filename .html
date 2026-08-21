@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pizza Hot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff8f1;
+      --panel: #fff;
+      --primary: #d92d2d;
+      --primary-dark: #9d1f1f;
+      --accent: #f4b23f;
+      --dark: #1d1d1d;
+      --muted: #6b6b6b;
+      --shadow: 0 20px 50px rgba(0,0,0,0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+    }
+
+    img { max-width: 100%; display: block; }
+
+    a { text-decoration: none; color: inherit; }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      background: rgba(29,29,29,0.88);
+      color: #fff;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 10px 0;
+    }
+
+    .topbar .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .topbar .info {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .topbar .socials {
+      display: flex;
+      gap: 14px;
+      opacity: 0.9;
+    }
+
+    header {
+      background: rgba(17, 17, 17, 0.82);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      color: #fff;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #ff7d52);
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+      box-shadow: 0 10px 25px rgba(217,45,45,0.4);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-btn:hover { background: var(--primary-dark); }
+
+    .hero {
+      position: relative;
+      min-height: 760px;
+      display: flex;
+      align-items: center;
+      background:
+        linear-gradient(90deg, rgba(20,18,16,0.7), rgba(20,18,16,0.38)),
+        url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      color: white;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 30px;
+      align-items: center;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 80px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 6rem);
+      line-height: 0.95;
+      margin: 0 0 18px;
+      max-width: 620px;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 560px;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 16px 26px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #ff7d52);
+      color: white;
+      box-shadow: 0 16px 30px rgba(217,45,45,0.25);
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); }
+
+    .btn-light {
+      background: rgba(255,255,255,0.08);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.28);
+    }
+
+    .stats {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      min-width: 110px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .stat span {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.92rem;
+    }
+
+    .hero-card {
+      justify-self: end;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      border-radius: 30px;
+      padding: 20px;
+      width: min(420px, 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      border-radius: 24px;
+      margin-bottom: 18px;
+    }
+
+    .hero-card .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .hero-card h3 {
+      font-size: 1.45rem;
+      margin: 0;
+    }
+
+    .rating {
+      color: #ffd76a;
+      letter-spacing: 0.1em;
+      font-size: 1rem;
+    }
+
+    .price {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    section {
+      padding: 100px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 38px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      margin: 0;
+      line-height: 1;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 520px;
+      font-size: 1.05rem;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(220px, 1fr));
+      gap: 28px;
+    }
+
+    .pizza-card {
+      background: var(--panel);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(29,29,29,0.06);
+      border: 1px solid rgba(29,29,29,0.04);
+      transition: 0.25s ease;
+    }
+
+    .pizza-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow);
+    }
+
+    .pizza-card img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+    }
+
+    .pizza-body {
+      padding: 24px 22px 26px;
+    }
+
+    .pizza-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .pizza-card h3 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #ffe7c2;
+      color: #8a5e00;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pizza-body p {
+      color: var(--muted);
+      margin: 0 0 18px;
+      min-height: 52px;
+    }
+
+    .pizza-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .price-box {
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--primary);
+    }
+
+    .mini-btn {
+      background: var(--dark);
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .promo {
+      background: #1d1d1d;
+      color: white;
+      border-radius: 38px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .promo-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+
+    .promo-copy {
+      padding: 60px 52px;
+    }
+
+    .promo-copy h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.3rem, 4vw, 3.8rem);
+      line-height: 1.05;
+      margin: 0 0 20px;
+    }
+
+    .promo-copy p {
+      color: rgba(255,255,255,0.74);
+      margin: 0 0 26px;
+      font-size: 1.05rem;
+    }
+
+    .promo-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(180px, 1fr));
+      gap: 18px 24px;
+      margin-bottom: 26px;
+    }
+
+    .promo-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      color: rgba(255,255,255,0.88);
+      font-weight: 600;
+    }
+
+    .promo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(244,178,63,0.18);
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-size: 1.15rem;
+    }
+
+    .promo-image {
+      min-height: 100%;
+      background: url('https://images.unsplash.com/photo-1548365328-9f547fb9587c?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .feature {
+      background: #fff;
+      border-radius: 26px;
+      padding: 28px 24px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+      border: 1px solid rgba(29,29,29,0.04);
+    }
+
+    .feature-icon {
+      width: 62px;
+      height: 62px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #fff0d6, #ffe2b0);
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+
+    .feature h3 {
+      margin: 0 0 12px;
+      font-size: 1.45rem;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(200px, 1fr));
+      gap: 24px;
+    }
+
+    .testimonial {
+      background: #fff;
+      border-radius: 24px;
+      padding: 28px 22px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+    }
+
+    .stars {
+      color: #f3b233;
+      letter-spacing: 0.15em;
+      margin-bottom: 12px;
+    }
+
+    .testimonial p {
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 0 0 18px;
+    }
+
+    .person {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .person img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .person strong {
+      display: block;
+      font-size: 1rem;
+    }
+
+    .person span {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .cta {
+      background: linear-gradient(135deg, rgba(217,45,45,0.96), rgba(143,28,28,0.96));
+      color: white;
+      border-radius: 32px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+    }
+
+    .cta-copy {
+      padding: 56px 50px;
+    }
+
+    .cta-copy h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      margin: 0 0 18px;
+    }
+
+    .cta-copy p {
+      color: rgba(255,255,255,0.8);
+      margin: 0 0 24px;
+      max-width: 540px;
+      font-size: 1.06rem;
+    }
+
+    .cta-form {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cta-form input {
+      flex: 1 1 200px;
+      min-width: 180px;
+      padding: 18px 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      outline: none;
+    }
+
+    .cta-form input::placeholder { color: rgba(255,255,255,0.7); }
+
+    .cta-image {
+      min-height: 100%;
+      background: url('https://images.unsplash.com/photo-1552539618-7eec9b4d8d0a?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    }
+
+    footer {
+      padding: 30px 0 50px;
+      color: var(--muted);
+      background: #f8eee6;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+    }
+
+    @media (max-width: 980px) {
+      .menu-grid,
+      .features,
+      .testimonials {
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+      }
+
+      .hero-inner,
+      .promo-grid,
+      .cta {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card {
+        justify-self: start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .topbar .container,
+      .nav,
+      .section-head,
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 14px 20px;
+      }
+
+      .menu-grid,
+      .features,
+      .testimonials,
+      .promo-list {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: 650px;
+      }
+
+      .promo-copy,
+      .cta-copy {
+        padding: 36px 24px;
+      }
+
+      .hero-card img {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <div class="info">
+        <span>📍 Av. Central 245</span>
+        <span>📞 +1 234 567 890</span>
+        <span>⏰ 12:00 PM - 11:30 PM</span>
+      </div>
+      <div class="socials">
+        <span>Instagram</span>
+        <span>Facebook</span>
+        <span>Twitter</span>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        Pizza Hot
+      </div>
+
+      <nav class="nav-links">
+        <a href="#home">Inicio</a>
+        <a href="#menu">Menú</a>
+        <a href="#promos">Promociones</a>
+        <a href="#about">Nosotros</a>
+        <a href="#reviews">Opiniones</a>
+      </nav>
+
+      <button class="nav-btn">Pedir ahora</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-inner">
+        <div>
+          <div class="eyebrow">🍕 Pizza fresca al momento</div>
+          <h1>La pizza más caliente de la ciudad</h1>
+          <p>
+            Masa artesanal, salsa casera y los mejores ingredientes para una experiencia irresistible
+            cada vez que la sirves en casa o la compartes con amigos.
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary">Ordena ahora</button>
+            <button class="btn btn-light">Ver menú</button>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <strong>10k+</strong>
+              <span>Clientes</span>
+            </div>
+            <div class="stat">
+              <strong>4.9</strong>
+              <span>Valoración</span>
+            </div>
+            <div class="stat">
+              <strong>20 min</strong>
+              <span>Entrega</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <img src="https://images.unsplash.com/photo-1552539618-7eec9b4d8d0a?auto=format&fit=crop&w=900&q=80" alt="Pizza especial" />
+          <div class="meta">
+            <h3>Suprema Hot</h3>
+            <div class="rating">★★★★★</div>
+          </div>
+          <div class="meta">
+            <span>Queso, pepperoni, jamón y salsa</span>
+            <div class="price">$18.90</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu">
+      <div class="container">
+        <div class="section-head">
+          <h2>Nuestras especialidades</h2>
+          <p>Combinamos recetas clásicas con sabores modernos para que cada rebanada sea memorable.</p>
+        </div>
+
+        <div class="menu-grid">
+          <article class="pizza-card">
+            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80" alt="Pizza Margherita" />
+            <div class="pizza-body">
+              <div class="pizza-top">
+                <h3>Margherita</h3>
+                <span class="tag">Popular</span>
+              </div>
+              <p>Mozzarella fresca, albahaca, tomate y aceite de oliva.</p>
+              <div class="pizza-footer">
+                <div class="price-box">$16.50</div>
+                <span class="mini-btn">Agregar</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pizza-card">
+            <img src="https://images.unsplash.com/photo-1548365328-9f547fb9587c?auto=format&fit=crop&w=800&q=80" alt="Pizza Pepperoni" />
+            <div class="pizza-body">
+              <div class="pizza-top">
+                <h3>Pepperoni</h3>
+                <span class="tag">Picante</span>
+              </div>
+              <p>Salami pepperoni, queso derretido y salsa roja intensa.</p>
+              <div class="pizza-footer">
+                <div class="price-box">$18.90</div>
+                <span class="mini-btn">Agregar</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pizza-card">
+            <img src="https://images.unsplash.com/photo-1528137871618-79d3d1a5b3af?auto=format&fit=crop&w=800&q=80" alt="Pizza BBQ Chicken" />
+            <div class="pizza-body">
+              <div class="pizza-top">
+                <h3>BBQ Chicken</h3>
+                <span class="tag">Nuevo</span>
+              </div>
+              <p>Pollo a la parrilla, cebolla, salsa BBQ y queso cheddar.</p>
+              <div class="pizza-footer">
+                <div class="price-box">$20.20</div>
+                <span class="mini-btn">Agregar</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="pizza-card">
+            <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=800&q=80" alt="Pizza Cuatro Quesos" />
+            <div class="pizza-body">
+              <div class="pizza-top">
+                <h3>4 Quesos</h3>
+                <span class="tag">Fusión</span>
+              </div>
+              <p>Gouda, mozzarella, parmesano y queso azul cremoso.</p>
+              <div class="pizza-footer">
+                <div class="price-box">$19.40</div>
+                <span class="mini-btn">Agregar</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="promos">
+      <div class="container">
+        <div class="promo">
+          <div class="promo-grid">
+            <div class="promo-copy">
+              <div class="eyebrow" style="background: rgba(255,255,255,0.08);">🔥 Oferta especial</div>
+              <h2>Pide dos pizzas y lleva la tercera gratis</h2>
+              <p>Incluye una pizza extra de tu elección, perfectas para compartir en reuniones, noches de película o cenas rápidas.</p>
+
+              <div class="promo-list">
+                <div class="promo-item"><div class="promo-icon">✓</div> Misión artesanal</div>
+                <div class="promo-item"><div class="promo-icon">✓</div> Entrega rápida</div>
+                <div class="promo-item"><div class="promo-icon">✓</div> Ingredientes frescos</div>
+                <div class="promo-item"><div class="promo-icon">✓</div> Pago seguro</div>
+              </div>
+
+              <button class="btn btn-primary">Reservar oferta</button>
+            </div>
+            <div class="promo-image" aria-label="Pizza al horno"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-head">
+          <h2>¿Por qué elegir Pizza Hot?</h2>
+          <p>Nos apasiona preparar cada pizza con pasión, calidad y un toque de sabor que mantiene a clientes regresando.</p>
+        </div>
+
+        <div class="features">
+          <article class="feature">
+            <div class="feature-icon">🥪</div>
+            <h3>Ingredientes frescos</h3>
+            <p>Usamos verduras, quesos y carnes de la mejor calidad para cada preparación.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-icon">🔥</div>
+            <h3>Horno a leña</h3>
+            <p>Cocción perfecta que aporta ese sabor ahumado y dorado que todos aman.</p>
+          </article>
+
+          <article class="feature">
+            <div class="feature-icon">🚚</div>
+            <h3>Entrega veloz</h3>
+            <p>Entregamos en tiempo récord para que tu pizza llegue aún caliente.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews">
+      <div class="container">
+        <div class="section-head">
+          <h2>Lo que dicen nuestros clientes</h2>
+          <p>La confianza de la comunidad es nuestra mejor carta de presentación.</p>
+        </div>
+
+        <div class="testimonials">
+          <article class="testimonial">
+            <div class="stars">★★★★★</div>
+            <p>“La mejor pizza que hemos probado en meses. La masa es increíble y la entrega fue rapidísima.”</p>
+            <div class="person">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" alt="Cliente 1" />
+              <div>
+                <strong>Lucía M.</strong>
+                <span>Cliente</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial">
+            <div class="stars">★★★★★</div>
+            <p>“El sabor de la BBQ Chicken es espectacular. La recomiendo totalmente para una cena familiar.”</p>
+            <div class="person">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80" alt="Cliente 2" />
+              <div>
+                <strong>David R.</strong>
+                <span>Cliente</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial">
+            <div class="stars">★★★★★</div>
+            <p>“El servicio es excelente y el ambiente también. Definitivamente vuelvo a pedir otra vez.”</p>
+            <div class="person">
+              <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=200&q=80" alt="Cliente 3" />
+              <div>
+                <strong>Sofia T.</strong>
+                <span>Cliente</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="cta">
+          <div class="cta-copy">
+            <div class="eyebrow" style="background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18);">¡Ahorra hoy!</div>
+            <h2>Suscríbete y recibe descuentos exclusivos</h2>
+            <p>Recibe promociones especiales, cupones de regalo y noticias de nuevos sabores directamente en tu correo.</p>
+            <div class="cta-form">
+              <input type="email" placeholder="Tu correo electrónico" />
+              <button class="btn btn-light">Unirme</button>
+            </div>
+          </div>
+          <div class="cta-image" aria-label="Pizza fresca"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="brand" style="color: var(--dark);">
+        <div class="brand-mark">P</div>
+        Pizza Hot
+      </div>
+      <div>© 2026 Pizza Hot. Todos los derechos reservados.</div>
+      <div>Hecho con sabor y pasión.</div>
+    </div>
+  </footer>
+</body>
+</html>
