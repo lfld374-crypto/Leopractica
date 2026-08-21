@@ -127,6 +127,111 @@
 
     .nav-btn:hover { background: var(--primary-dark); }
 
+    .nav-btn.secondary {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .login-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 13, 13, 0.55);
+      display: grid;
+      place-items: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .login-card {
+      width: min(420px, calc(100% - 32px));
+      background: #fff;
+      border-radius: 24px;
+      padding: 30px 26px 24px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+    }
+
+    .login-card h3 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      text-align: center;
+      color: var(--dark);
+    }
+
+    .login-card p {
+      margin: 0 0 22px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .login-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    .login-form input {
+      width: 100%;
+      border: 1px solid #e6d7cf;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      background: #fffaf7;
+      color: var(--dark);
+    }
+
+    .login-form input:focus {
+      outline: 2px solid rgba(217, 45, 45, 0.15);
+      border-color: var(--primary);
+    }
+
+    .login-form button {
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), #ff7d52);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 18px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .login-message {
+      min-height: 20px;
+      margin: 8px 0 0;
+      font-size: 0.92rem;
+      color: var(--primary-dark);
+      text-align: center;
+    }
+
+    .login-close {
+      display: block;
+      margin-left: auto;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 1.8rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .login-user {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
     .hero {
       position: relative;
       min-height: 760px;
@@ -680,7 +785,10 @@
         <a href="#reviews">Opiniones</a>
       </nav>
 
-      <button class="nav-btn">Pedir ahora</button>
+      <div style="display:flex; align-items:center; gap: 12px;">
+        <button id="loginBtn" class="nav-btn secondary">Iniciar sesión</button>
+        <button id="orderBtn" class="nav-btn">Pedir ahora</button>
+      </div>
     </div>
   </header>
 
@@ -919,6 +1027,25 @@
     </section>
   </main>
 
+  <div id="loginModal" class="login-modal hidden" aria-hidden="true">
+    <div class="login-card">
+      <button class="login-close" type="button" id="closeLogin" aria-label="Cerrar">×</button>
+      <h3>Acceso</h3>
+      <p>Ingresa tus datos para continuar</p>
+
+      <form id="loginForm" class="login-form">
+        <input type="email" id="email" placeholder="Correo electrónico" required />
+        <input type="password" id="password" placeholder="Contraseña" required />
+        <button type="submit">Entrar</button>
+      </form>
+
+      <p class="login-message" id="loginMessage"></p>
+      <p style="margin-top: 18px; font-size: 0.8rem; color: var(--muted); text-align:center;">
+        Demo: admin@pizzahot.com / 123456
+      </p>
+    </div>
+  </div>
+
   <footer>
     <div class="container footer-inner">
       <div class="brand" style="color: var(--dark);">
@@ -929,5 +1056,118 @@
       <div>Hecho con sabor y pasión.</div>
     </div>
   </footer>
+
+  <script>
+    const USERS = [
+      { email: 'admin@pizzahot.com', password: '123456', name: 'Admin' }
+    ];
+
+    const SESSION_KEY = 'pizzaHotSession';
+    const loginModal = document.getElementById('loginModal');
+    const loginBtn = document.getElementById('loginBtn');
+    const orderBtn = document.getElementById('orderBtn');
+    const closeLogin = document.getElementById('closeLogin');
+    const loginForm = document.getElementById('loginForm');
+    const loginMessage = document.getElementById('loginMessage');
+
+    function getSession() {
+      const session = localStorage.getItem(SESSION_KEY);
+      return session ? JSON.parse(session) : null;
+    }
+
+    function setSession(user) {
+      localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+    }
+
+    function clearSession() {
+      localStorage.removeItem(SESSION_KEY);
+    }
+
+    function openLoginModal() {
+      loginModal.classList.remove('hidden');
+      loginModal.setAttribute('aria-hidden', 'false');
+      loginMessage.textContent = '';
+      document.getElementById('email').focus();
+    }
+
+    function closeLoginModal() {
+      loginModal.classList.add('hidden');
+      loginModal.setAttribute('aria-hidden', 'true');
+      loginForm.reset();
+      loginMessage.textContent = '';
+    }
+
+    function renderAuthState() {
+      const user = getSession();
+
+      if (user) {
+        loginBtn.textContent = 'Hola, ' + user.name;
+        loginBtn.classList.add('login-user');
+        loginBtn.onclick = () => {
+          clearSession();
+          renderAuthState();
+          loginMessage.textContent = 'Sesión cerrada correctamente.';
+        };
+        orderBtn.textContent = 'Pedir ahora';
+      } else {
+        loginBtn.textContent = 'Iniciar sesión';
+        loginBtn.classList.remove('login-user');
+        loginBtn.onclick = openLoginModal;
+        orderBtn.textContent = 'Pedir ahora';
+      }
+    }
+
+    loginBtn.addEventListener('click', () => {
+      const user = getSession();
+      if (user) {
+        clearSession();
+        renderAuthState();
+        loginMessage.textContent = 'Sesión cerrada correctamente.';
+        return;
+      }
+      openLoginModal();
+    });
+
+    orderBtn.addEventListener('click', () => {
+      const user = getSession();
+      if (!user) {
+        openLoginModal();
+        loginMessage.textContent = 'Debes iniciar sesión para hacer un pedido.';
+        return;
+      }
+      alert('¡Pedido autorizado para ' + user.name + '!');
+    });
+
+    closeLogin.addEventListener('click', closeLoginModal);
+    loginModal.addEventListener('click', (event) => {
+      if (event.target === loginModal) closeLoginModal();
+    });
+
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      const user = USERS.find((item) => item.email === email && item.password === password);
+
+      if (!user) {
+        loginMessage.textContent = 'Correo o contraseña incorrectos.';
+        loginMessage.style.color = '#b33232';
+        return;
+      }
+
+      setSession({ email: user.email, name: user.name });
+      loginMessage.textContent = '¡Bienvenido!';
+      loginMessage.style.color = '#1d8f54';
+      renderAuthState();
+
+      setTimeout(() => {
+        closeLoginModal();
+      }, 800);
+    });
+
+    renderAuthState();
+  </script>
 </body>
 </html>
